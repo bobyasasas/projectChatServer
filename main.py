@@ -1,5 +1,4 @@
 import json
-import os
 from datetime import timedelta
 
 from flask import Flask, request, session
@@ -13,15 +12,15 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 BASE_URL = '/chat/'
 
 
-@app.route(BASE_URL + 'post/signup', methods=['POST'])
-def signup():
+@app.route(BASE_URL + 'post/login', methods=['POST'])
+def login():
     data = request.get_data()
     json_data = json.loads(data.decode("utf-8"))
     username = json_data["username"]
     passwd = json_data["passwd"]
     mysql = myutil.mysql.Mydb()
-    sign_result = mysql.add_user(username, passwd)
-    if sign_result == 0:
+    login_result = mysql.add_user(username, passwd)
+    if login_result == 0:
         result = {
             'msg': "false"
         }
@@ -35,8 +34,8 @@ def signup():
     return result_json
 
 
-@app.route(BASE_URL + 'post/login', methods=['POST'])
-def login():
+@app.route(BASE_URL + 'post/signin', methods=['POST'])
+def signin():
     data = request.get_data()
     json_data = json.loads(data.decode("utf-8"))
     username = json_data["username"]
