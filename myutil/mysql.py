@@ -42,5 +42,11 @@ class Mydb:
                     return True
             return False
 
+    def add_contact(self, username, username_contact):
+        with self.db.cursor() as cursor:
+            sql = "INSERT INTO contacts(username, username_contact) VALUES (%s, %s)"
+            cursor.execute(sql, (username, username_contact))
+            cursor.execute(sql, (username_contact, username))
+
     def close(self):
         self.db.close()

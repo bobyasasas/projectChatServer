@@ -54,5 +54,23 @@ def signin():
     return json.dumps(result)
 
 
+@app.route(BASE_URL + 'post/add_contact', methods=['POST'])
+def add_contact():
+    data = request.get_data()
+    json_data = json.loads(data.decode("utf-8"))
+    username = json_data["username"]
+    username_contact = json_data["username_contact"]
+    mysql = myutil.mysql.Mydb()
+    if mysql.add_contact(username, username_contact):
+        result = {
+            'msg': "true"
+        }
+    else:
+        result = {
+            'msg': "false"
+        }
+    return json.dumps(result)
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8080)
