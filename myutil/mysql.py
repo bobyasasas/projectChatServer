@@ -90,7 +90,7 @@ class Mydb:
             print(f"Error while executing query: {e}")
             return False
 
-    def upload(self,filename,filesize):
+    def upload(self, filename, filesize):
         units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
         power = 0
         if filesize == 0:
@@ -128,7 +128,7 @@ class Mydb:
             print(f"Error while executing query: {e}")
             return False
 
-    def ans(self,username,contact):
+    def ans(self, username, contact):
         # 获取当前时间
         now = datetime.now()
 
@@ -140,12 +140,13 @@ class Mydb:
         try:
             with self.db.cursor() as cursor:
                 insert_sql = "INSERT INTO ans(username, contact,year,month,day,hour) VALUES (%s, %s,%s,%s,%s,%s)"
-                cursor.execute(insert_sql, (username, contact,year,month,day,hour))
+                cursor.execute(insert_sql, (username, contact, year, month, day, hour))
                 self.db.commit()
                 print("ans add successfully.")
                 return True
         except Error as e:
             print(f"Error while executing query: {e}")
             return False
+
     def close(self):
         self.db.close()

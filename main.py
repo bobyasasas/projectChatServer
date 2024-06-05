@@ -18,7 +18,7 @@ def mem_con_add_message(sender, receiver, message):
     cur.execute('insert into message values(?, ?, ?,?)', (sender, receiver, message, datetime.datetime.now()))
     print(sender, " said to ", receiver, " ", message)
     mysql = myutil.mysql.Mydb()
-    mysql.ans(sender,receiver)
+    mysql.ans(sender, receiver)
 
 
 def mem_con_get_message(sender, receiver):
@@ -26,6 +26,13 @@ def mem_con_get_message(sender, receiver):
     rows = cur.fetchall()
     cur.execute('delete from message where sender=? and receiver=?', (sender, receiver))
     return rows
+
+
+def mem_con_check_message(receiver):
+    cur.execute('select sender from message where receiver=?', (receiver,))
+    names = cur.fetchall()
+    unique_names = list(set(names))
+    return unique_names
 
 
 @app.route(BASE_URL + 'post/login', methods=['POST'])
@@ -162,6 +169,15 @@ def download_file(filename):
     file_path = f'./file/uploads/{filename}'
     # 使用 send_file 函数发送文件
     return send_file(file_path, as_attachment=True)
+
+
+@app.route(BASE_URL + 'post/check_message', methods=['POST'])
+def check_messages():
+    data = request.get_data()
+    json_data = json.loads(data.decode("utf-8"))
+    username = json_data["username"]
+    result = mem_con_check_message(username)
+    return json.dumps(result)
 
 
 if __name__ == '__main__':
