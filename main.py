@@ -3,6 +3,9 @@ import os
 import sqlite3
 import datetime
 
+import time
+
+import requests
 from flask import Flask, request, session, jsonify, send_file
 
 import myutil.mysql
@@ -14,7 +17,26 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=7)
 BASE_URL = '/chat/'
 
 
+def get_post(sender, receiver, message):
+    flume_http_url = "http://localhost:50020"
+    body = f'{sender} send to {receiver} a message : {message}'
+    timestamp = time.time()
+    data = [{"headers": {"timestamp": timestamp
+                         },
+             "body": body
+             }]
+    json_data = json.dumps(data)
+    response = requests.post(flume_http_url, data=json_data)
+
+    # 检查响应状态码
+    if response.ok:
+        print("数据发送成功")
+    else:
+        print(f"数据发送失败，状态码：{response.status_code}")
+
+
 def mem_con_add_message(sender, receiver, message):
+    get_post(sender, receiver, message)
     cur.execute('insert into message values(?, ?, ?,?)', (sender, receiver, message, datetime.datetime.now()))
     print(sender, " said to ", receiver, " ", message)
     mysql = myutil.mysql.Mydb()

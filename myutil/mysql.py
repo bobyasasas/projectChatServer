@@ -8,7 +8,7 @@ from pymysql import Error
 class Mydb:
 
     def __init__(self):
-        self.db = pymysql.connect(host='119.188.240.140',
+        self.db = pymysql.connect(host='localhost',
                                   user='chat',
                                   password='EmzPYQEXDwp7S4pd',
                                   database='chat',
