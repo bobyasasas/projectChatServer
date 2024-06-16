@@ -9,6 +9,7 @@ import requests
 from flask import Flask, request, session, jsonify, send_file
 
 import myutil.mysql
+from myutil import sqoop_util
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "wk6666"
@@ -200,6 +201,13 @@ def check_messages():
     username = json_data["username"]
     result = mem_con_check_message(username)
     return json.dumps(result)
+
+
+@app.route(BASE_URL + 'post/sqoop', methods=['POST'])
+def sqoop_backup():
+    request.get_data()
+    sqoop_util.import_data()
+    return jsonify({'msg': 'true'}), 200
 
 
 if __name__ == '__main__':
